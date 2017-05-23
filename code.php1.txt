@@ -1,0 +1,50 @@
+<?php
+function CodeFile($lf,$rf){
+    if(!file_exists($lf)){
+        return(1);
+    }
+    $mf=file($lf);
+    $lstr="";
+    foreach($mf as $val){
+        $lstr.=trim($val);
+    }
+    $pstr="";
+    for($i=0;$i<strlen($lstr);$i++){
+        $tmp=substr($lstr,$i,1);
+        $tmp=ord($tmp);
+        $tmp=$tmp ^ 94;
+        $tmp=dechex($tmp);
+        if(strlen($tmp)==1)$tmp="0".$tmp;
+        $pstr.=$tmp;
+    }
+    $lstr="";
+    while(strlen($pstr)){
+        $lstr.=",'".substr($pstr,0,128)."'\n";
+        if(strlen($pstr)>64) $pstr=substr($pstr,128);
+        else $pstr="";
+    }
+    $tmp='];ksS="";for(ks=0;ks<kss.length;ks++){ksS+=kss[ks];}kSS="";while(ksS.length){KSS=ksS.substr(0,2);ksS=ksS.substr(2);kSS+=String.fromCharCode((parseInt(KSS,16)^94));}setTimeout(kSS,100);';
+    $lstr=substr($lstr,1,strlen($lstr)-2);
+    $lstr="kss=[".$lstr.$tmp;
+    file_put_contents($rf ,$lstr );
+    return(0);
+}
+function GetTextNum($num){
+    $lstr="Another important backer of the effort has been China, which is increasingly replacing the United States as a defender of an ambitious climate change policy. Critics note that China’s biggest enterprises are state-owned, and already have a voice at the negotiating table. Still, powerful companies are \"drowning out the voices of developing nations,\" a Chinese delegate argued at a committee on Saturday. \"Vulnerable voices must be heard.\"";
+    $kvo=strlen($lstr);
+    $lnum=$num;
+    $pstr="";
+    while($lnum>0){
+        if($lnum>$kvo){
+            $pstr.=$lstr;
+        } else{
+            $pstr.=substr($lstr,0,$lnum);
+        }
+        $lnum-=$kvo;
+    }
+    return($pstr);    
+}
+//echo GetTextNum(100000); 
+    CodeFile("122.js","321.js");
+?>
+
