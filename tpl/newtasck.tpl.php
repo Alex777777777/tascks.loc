@@ -1,5 +1,7 @@
 <?php
 require_once("cls/mttascks.class.php");
+if(isset($_GET["lp"]))$_SESSION["lp"] = $_GET["lp"];
+if(isset($_GET["rp"]))$_SESSION["rp"] = $_GET["rp"];
     $mts=new mtTascks();
     $gp=new mtTascks();
     $mtpl= new mtTascksTPL();
@@ -22,8 +24,10 @@ require_once("cls/mttascks.class.php");
     }
     $grp_txt="Без группы";
     if(isset($_GET['gp'])){
+        if($_GET['gp']!="0"){
         $gp->GetItem($_GET['gp']);
         $grp_txt=$gp->name;
+        };
     }
     
 ?>
@@ -48,22 +52,24 @@ $ext="selected";
 <?php
     }else{
         $val=$mtpl->arr[$mts->tpl]; 
-        echo "<input class='static_tpl' value='$val' readonly>" ;
+        echo "<input class='static_tpl' value='$val' data-id='$mts->tpl' readonly>" ;
     };
 ?>
 </div>
-<div class="frm_str"><label for="tsk_name">Группа:</label><input id="tsk_grp" type="text" readonly value="<?= $grp_txt ?>" data-id="<?php $gp->id ?>"></div>
-<div class="frm_str"><label for="tsk_name">Наименование:</label><input id="tsk_name" autocomplete="off" type="text" placeholder="Название" required value="<?php echo $mts->name;?>" <?php  if($mts->id) echo " readonly";?>></div>
+<div class="frm_str"><label for="tsk_name">Группа:</label><input id="tsk_grp" type="text" readonly value="<?= $grp_txt ?>" data-id="<?= $gp->id ?>"></div>
+<div class="frm_str"><label for="tsk_name">Наименование:</label><input id="tsk_name" autocomplete="off" type="text" placeholder="Название" required value="<?= $mts->name;?>"></div>
 <div class="frm_str"><label for="tsk_descr">Описание:</label><textarea id="tsk_descr" placeholder="Описание"><?php echo $mts->descr;?></textarea></div>
 <?php
     if($mts->id!=0){
         echo '<div class="panel panel-default" id="epanel">';
         echo '<div>Дополнительные параметры</div>';
+        $pobj=new mtTascksParam();
+        $pobj->tasck_id=$mts->id;
         foreach($mtpl->params as $val){
             $lname=$val[0];
             $ldescr=$val[1];
             if($ldescr=="")$ldescr=$lname;
-            echo '<div class="frm_str"><label for="tsk_'.$lname.'">'.$ldescr.':</label><input id="tsk_'.$lname.'" autocomplete="off" type="text"></div>';
+            echo '<div class="frm_str"><label>'.$ldescr.':</label><input autocomplete="off" type="text" data-id="param" data-param="'.$lname.'" value="'.$pobj->GetParam($lname).'"></div>';
         }
         echo '</div>';
 

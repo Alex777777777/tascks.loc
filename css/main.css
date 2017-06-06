@@ -1,0 +1,65 @@
+body{min-width:1000px}
+.row{display:flex;}
+.u_info{
+width: 300px;
+text-align: left;
+margin: 0 15px;
+color:#1c7acb;
+}
+.t_info{
+width: 350px;
+text-align: left;
+margin: 0 15px;
+color:#1c7acb;
+}
+.info_str{display:flex;margin:5px;}
+.info_str>label{display:block;}
+.info_str>span{
+    display:block;
+    border-bottom:1px solid;
+    text-align: right;
+    padding: 0 10px;
+}
+.u_info label{width: 120px;}
+.u_info span{width: 150px;}
+.t_info label{width: 200px;}
+.t_info span{width: 35px;}
+.t_info select{width: 150px;}
+#bt_load{
+    margin: 5px auto;   
+}
+#deskbord{
+    min-height: 350px;
+}
+#desk_param{}
+#desk_param ul{display:block;padding: 0;}
+#desk_param li{display:flex;margin:5px;}
+#desk_param .par_name{width:110px;}
+#desk_param .par_val{width:150px;text-align: center;border:1px solid;}
+.col1{width:40px;}
+.col2{width:160px;}
+.col3{width:150px;}
+.col4{min-width:200px;}
+.col5{width:130px;}
+/*#ext-wrp{
+    display:block;
+} */
+.addform{
+    position:fixed;
+    display:none;
+    top:150px;
+    left:400px;
+    background: #fff;
+    width:400px;
+    z-index:99;
+}
+.addform .panel-body span{
+width: 100px;
+display: block;
+}
+.addform .panel-body input{
+width: 370px;
+}
+.frm_str{
+    margin: 10px auto;
+}

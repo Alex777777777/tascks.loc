@@ -1,8 +1,6 @@
 var ic_folder_c="folder-close";
 var ic_folder_o="folder-open";
 var ic_file="file";
-var lp_curdir=0;
-var rp_curdir=0;
 var CurPanel="";
 var UPanel="";
 function CreateSubMenu(){
@@ -13,11 +11,10 @@ function CreateSubMenu(){
     $("div#submenu").html(tmp);
 }
 function GetItems(){
-    if(UPanel=="rpanel")lid=rp_curdir;
-    else lid=lp_curdir;
     param={
-        "id":lid
-    }
+        "lp":lp_curdir,
+        "rp":rp_curdir
+    }   
     $.ajax({
         type: "POST",
         url: "?cmd=getitem",
@@ -25,18 +22,21 @@ function GetItems(){
         cache: false,
         async: true,
         success: function(qstr){
-            tsys=JSON.parse(qstr);
-            lstr=tsys[0];
-            tsys.splice(0,1);
-            if(UPanel=="rpanel"){
-                rpanel= tsys;
-                UpdateP($("#rpanel"),rpanel);
-                $(".rpanel .path").html(lstr);
-            }else{
+            arr=JSON.parse(qstr);
+            if(arr){
+                tsys=JSON.parse(arr["lp"]);
+                lstr=tsys[0];
+                tsys.splice(0,1);
                 lpanel= tsys;
                 UpdateP($("#lpanel"),lpanel);
                 $(".lpanel .path").html(lstr);
-            };
+                tsys=JSON.parse(arr["rp"]);
+                lstr=tsys[0];
+                tsys.splice(0,1);
+                rpanel= tsys;
+                UpdateP($("#rpanel"),rpanel);
+                $(".rpanel .path").html(lstr);
+            }
         }
     })
 }
@@ -74,9 +74,7 @@ function UpdateP(obj,lst){
         lrow.eq(3).html(ldt.tpln);
     }
 }
-function StartPanel(){
-    lpanel= tsys;
-    rpanel= tsys;
+function UpdatePanel(){
     UpdateP($("#lpanel"),lpanel);
     UpdateP($("#rpanel"),rpanel);
 }
@@ -113,15 +111,14 @@ $(document).ready(function(){
         if(!$(this).is(".active2"))return;
         lid=$(this).attr("data-id");
         if($(this).is(".st_grp")){
-            $("tr").removeClass("active2");
-            $("submenu").css("display","none");
-            UPanel=CurPanel;
-            if(UPanel=="rpanel")rp_curdir=lid;
+            if(CurPanel=='rpanel') rp_curdir=lid;
             else lp_curdir=lid;
+            $("tr").removeClass("active2");
+            $("#submenu").css("display","none");
             GetItems();
-        }else{
-            
-            window.location = "?do=newtasck&item="+lid;
+            UpdatePanel();
+        }else{            
+            window.location = "?do=newtasck&item="+lid+"&lp="+lp_curdir+"&rp="+rp_curdir;
         }
     })
     $(document).on("click",".it_path",function(){
@@ -132,7 +129,149 @@ $(document).ready(function(){
         if(UPanel=="rpanel")rp_curdir=lid;
         else lp_curdir=lid;
         GetItems();
+        UpdatePanel();
     })
-    StartPanel();
-    CreateSubMenu();
+    $("button.btn-mini").click(function(){
+        di=$(this).attr("data-id");
+        ext="&lp="+lp_curdir+"&rp="+rp_curdir;
+        switch(di){
+            case "nz":
+                cgp=0;
+                if(CurPanel=="rpanel")cgp=rp_curdir;
+                else cgp=lp_curdir;
+                window.location="?do=newtasck&gp="+cgp+ext;
+            break;
+            case "ng":
+                $(".ngfrm input").val("");
+                $(".ngfrm textarea").val("");
+                $(".ngfrm").css("display","block");
+                $("#ext-wrp").css("display","block");
+            break;
+            case "fcl":
+                $(".ngfrm").css("display","none");
+                $("#ext-wrp").css("display","none");
+            break;
+            case "fwr":
+                if(CurPanel="rpanel"){
+                    lfrom=rp_curdir;
+                    lto=lp_curdir;
+                }else{
+                    lfrom=lp_curdir;
+                    lto=rp_curdir;
+                }
+                lname=$("#frm_name").val();
+                ldescr=$("#frm_descr").val();
+                if(!lname.length){alert("Пустое наименование");return;}
+                param={
+                    "tpl":"ng",
+                    "from":lfrom,
+                    "to":lto,
+                    "name":lname,
+                    "descr":ldescr
+                }
+                $.ajax({
+                type: "POST",
+                url: "?cmd=tasckcmd",
+                data: param,
+                cache: false,
+                async: true,
+                success: function(qstr){
+                    ret=qstr;
+                    if(ret=="OK"){
+                        GetItems();
+                        $(".ngfrm").css("display","none");
+                        $("#ext-wrp").css("display","none");
+                        UpdatePanel();
+                    }
+                    if(ret=="ER"){
+                        alert("Ошибка создания группы!");
+                    }            
+                }
+                })
+                break;
+            case "mv":
+                lid=$(".active2").attr("data-id");
+                param={
+                    "tpl":"mv",
+                    "id":lid
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "?cmd=tasckcmd"+ext,
+                    data: param,
+                    cache: false,
+                    async: true,
+                    success: function(qstr){
+                        ret=qstr;
+                        if(ret=="OK"){
+                            GetItems();
+                            UpdatePanel();
+                            return;
+                        }
+                        if(ret=="ER"){
+                            alert("Ошибка удаления группы!");
+                            return;
+                        }
+                        alert(ret);
+                    }
+                })
+            break;
+            case "cp":
+                lid=$(".active2").attr("data-id");
+                param={
+                    "tpl":"cp",
+                    "id":lid
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "?cmd=tasckcmd"+ext,
+                    data: param,
+                    cache: false,
+                    async: true,
+                    success: function(qstr){
+                        ret=qstr;
+                        if(ret=="OK"){
+                            GetItems();
+                            UpdatePanel();
+                            return;
+                        }
+                        if(ret=="ER"){
+                            alert("Ошибка копирования группы!");
+                            return;
+                        }
+                    }
+                })
+            break;
+            case "dl":
+                if(!confirm("Действительно Удалить?"))return;
+                lid=$(".active2").attr("data-id");
+                param={
+                    "tpl":"dl",
+                    "id":lid
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "?cmd=tasckcmd"+ext,
+                    data: param,
+                    cache: false,
+                    async: true,
+                    success: function(qstr){
+                        ret=qstr;
+                        if(ret=="OK"){
+                            GetItems();
+                            UpdatePanel();
+                            return;
+                        }
+                        if(ret=="ER"){
+                            alert("Ошибка удаления группы!");
+                            return;
+                        }
+                        alert(ret);
+                    }
+                })
+            break;
+        }
+    })
+    GetItems();
+    UpdatePanel();
 })

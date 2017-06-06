@@ -45,7 +45,7 @@ $(document).ready(function(){
         }
         $.ajax({
             type: "POST",
-            url: "command.php",
+            url: "?cmd=usercmd",
             data: param,
             cache: false,
             async: true,

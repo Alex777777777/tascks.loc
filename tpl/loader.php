@@ -10,8 +10,9 @@
       exit;
   }
   $do="main";
-  if(isset($_GET["do"]))$_SESSION['do']=$_GET["do"];
-  if(isset($_SESSION['do']))$do=$_SESSION['do'];
+  if(isset($_GET["do"]))if($_GET["do"])$_SESSION['do']=$_GET["do"];
+  if(isset($_SESSION['do']))if($_SESSION['do']) $do=$_SESSION['do'];
+  
   
   require("header.tpl.php");
   require($do.".tpl.php");

@@ -5,8 +5,8 @@
 <meta http-equiv="Cache-Control" content="no-cache">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Lang" content="ru">
-<title>AV Checker</title>
-<link rel="shortcut icon" href="img/favicon.png" type="image/png">
+<title>Tasck Explorer</title>
+<link rel="shortcut icon" href="img/favicon32.png" type="image/png">
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -30,7 +30,7 @@
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">AVChecker</a>
+          <a class="navbar-brand" href="#">Tasck Explorer</a>
         </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
@@ -38,7 +38,7 @@
         <li><a href="?do=resume">Результаты</a></li>
         <li><div class="dropdown" >            
                 Админка<span class="caret"></span>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+            <ul class="dropdown-menu">
                 <li><a tabindex="-1" href="?do=tascks">Таски</a></li>
                 <li><a tabindex="-1" href="?do=templ">Настройка Движка</a></li>
                 <li><a tabindex="-1" href="#">Что-то еще</a></li>
@@ -47,7 +47,14 @@
             </ul>
             </div>
         </li>
-        <li><a href="?do=users">Пользователи</a></li>
+        <li><div class="dropdown" >            
+                Безопассность<span class="caret"></span>
+            <ul class="dropdown-menu">
+                <li><a tabindex="-1" href="?do=users">Пользователи</a></li>
+                <li><a tabindex="-1" href="?do=groups">Группы</a></li>
+            </ul>
+            </div>
+        </li>
         <li><a href="?logout=true">Выход</a></li>
       </ul>
     </div>

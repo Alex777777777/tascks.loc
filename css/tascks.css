@@ -68,17 +68,14 @@ box-shadow: 0 0 5px #000;
 }
 #submenu{
 position:absolute;
+display:none;
 background: rgb(59, 78, 111);
 height:40px;
-color: #aaa;
-font-size: 20pt;
 padding: 5px;    
 }
-#submenu>span{
-    margin-right: 10px;
-}
-#submenu>span:hover{
-    color:#fff;
+#submenu>div{display: flex;margin: 0 0 0 auto;}
+.btn-mini{
+    display:block;
 }
 .st_file{
 color:#ff9000;
@@ -89,3 +86,30 @@ color:#000fff;
 }
 
 #edcell{display:none;}
+
+.ngfrm{
+display:none;
+position: absolute;
+z-index: 99;
+background: #fff;
+top: 150px;
+left: 400px;
+}
+.frm_str{
+margin: 5px auto;
+}
+.frm_str>span{
+    display:block;
+}
+.frm_str>input{
+display: block;
+width: 320px;
+}
+.frm_str>textarea{
+display: block;
+width: 320px;
+}
+.frm{
+margin-left: 10px;
+width: 150px;
+}

@@ -7,6 +7,7 @@ var $role;
 var $valid;
 var $jabber;
 var $isgroup;
+var $parent;
 
 var $LastErr;
 var $Err_Descr;
@@ -20,6 +21,7 @@ function __construct(){
     $this->role=0;
     $this->valid=0;
     $this->jabber="";
+    $this->parent=0;
     $this->isgroup="N";
     $this->LastErr=0;
     $this->authing=0;
@@ -48,6 +50,22 @@ function Select(){
     global $mdb;
     $this->arr=$mdb->getAll("SELECT id FROM ?n WHERE isgroup='N'",$this->tbl);
     return(count($this->arr));
+}
+function SelectUserGp($lid){
+    global $mdb;
+    $lstr="SELECT id,name,parent FROM ?n WHERE isgroup='N' AND (parent=$lid OR parent=0)";
+    $this->arr=$mdb->getAll($lstr,$this->tbl);
+    return(count($this->arr));
+}
+function SelectGp(){
+    global $mdb;
+    $lsql="SELECT id,name FROM ?n WHERE isgroup='Y' ORDER BY name ASC";
+    $arr=$mdb->getAll($lsql,$this->tbl);
+    $ret=array();
+    for($i=0;$i<count($arr);$i++){
+        $ret[$arr[$i]["id"]]=$arr[$i]["name"];
+    }
+    return($ret);
 }
 function Open($luser, $lpass){
     global $mdb;
@@ -85,15 +103,13 @@ function Frozen($lid){
     global $mdb;
     $this->LastErr=1;
     $lsql="UPDATE ".$this->tbl." SET role=0 WHERE id=".$lid;
-    $mdb->do_query($lsql);
-    if($mdb->LastErr)$this->LastErr=0;
+    $mdb->query($lsql);
 }
 function Delete($lid){
     global $mdb;
     $this->LastErr=1;
     $lsql="DELETE FROM ".$this->tbl." WHERE id=".$lid;
-    $mdb->do_query($lsql);
-    if($mdb->LastErr)$this->LastErr=0;
+    $mdb->query($lsql);
 }
 function GetItem($lid){
     global $mdb;
@@ -112,36 +128,47 @@ function GetItem($lid){
         $this->role=$ret["role"];
         $this->jabber=$ret["jabber"];
         $this->isgroup=$ret["isgroup"];
+        $this->parent=$ret["parent"];
         $this->LastErr=0;
     }else $this->LastErr=2;    
     
 }
+function SetParent(){
+    global $mdb;
+    $lsql="UPDATE ?n SET parent=?i WHERE id=?i";
+    return($mdb->query($lsql,$this->tbl,$this->parent,$this->id));
+}
+function GetParent(){
+    global $mdb;
+    $lsql="SELECT name FROM ?n WHERE id=?i";
+    $row=$mdb->getRow($lsql,$this->tbl,$this->parent);
+    $ret="Без Группы";
+    if(isset($row["name"])) $ret=$row["name"];
+    return($ret);
+}
+function NewGroup($lname){
+    global $mdb;
+    $this->LastErr=1;
+    $lsql="INSERT INTO ?n(name,isgroup) VALUES(?s,'Y')";
+    if($mdb->query($lsql,$this->tbl,$lname))return "OK";
+    else return "ER";
+}
 function Save(){
     global $mdb;
     $this->LastErr=1;
-    $this->login=strtolower($this->login);
+    $this->name=strtolower($this->name);
     if(!$this->id){$this->Insert();return;}
-    $lstr= "name='".$this->name."'";
-    $lstr.= ",jabber='".$this->jabber."'";
-    if($this->pass)$lstr.= ",pass='".md5($this->pass)."'";
-    $lstr.= ",role=".$this->role;
-    $lsql="UPDATE ".$this->tbl." SET ".$lstr." WHERE id=".$this->id;
-    $mdb->do_query($lsql);
-    if($mdb->LastErr)$this->LastErr=0;
+    $lsql="UPDATE ?n SET name=?s,pass=?s,role=?i,jabber=?s WHERE id=?i";
+    $ret=$mdb->query($lsql,$this->tbl,$this->name,md5($this->pass),$this->role,$this->jabber,$this->id);
 }
 function Insert(){
     global $mdb;
     $this->LastErr=1;
-    $lcol="name,jabber,pass,role";
-    $lstr= "'".$this->name."'";
-    $lstr.= ",'".$this->jabber."'";
-    if($this->pass)$lstr.= ",'".md5($this->pass)."'";
-    $lstr.= ",".$this->role;
-    $lsql="INSERT INTO ".$this->tbl."(".$lcol.") VALUES(".$lstr.")";
-    $mdb->do_query($lsql);
-    if($mdb->LastErr){
+    $lsql="INSERT INTO ?n(name,pass,role,jabber) VALUES(?s,?s,?i,?s)";
+    $ret=$mdb->query($lsql,$this->tbl,$this->name,md5($this->pass),$this->role,$this->jabber);
+    if(!$ret){
         $this->LastErr=0;
-        $this->id=mysqli_insert_id($mdb->lCon);
+        $this->id=$mdb->insertId();
     }
 }
 function Validate($par){

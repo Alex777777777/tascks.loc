@@ -1,0 +1,49 @@
+.gnav>li{
+position: relative;
+display: block;
+border-radius: 6px;
+box-shadow: 0 0 2px #000;
+margin: 5px auto;
+text-align: center;
+cursor: pointer;
+}
+.gnav>li:hover{
+box-shadow: 0 0 5px #000;
+margin: 5px auto;
+text-align: center;
+}
+.gnav>li.active2{
+color: #fff;
+background-color: #428bca;
+}
+.btn-mini{
+margin-left: 100px;
+margin-top: 20px;
+}
+.user_item{
+display: flex;
+border: 1px solid #428bca;
+width: 150px;
+padding: 5px;
+margin: 5px 10px;
+float: left;
+}
+.user_item>input{
+display: block;
+}
+.user_item>span{
+display: block;
+margin-left: 10px;
+}
+.frm_add{
+display: none;
+position:absolute;
+background:#fff;
+top:150px;
+left: 400px;
+z-index:99;    
+}
+.frm_str>input{
+margin: 0 5px;
+width: 300px;
+}

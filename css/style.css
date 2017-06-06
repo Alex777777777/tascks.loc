@@ -21,3 +21,10 @@ margin-top:50px;
 .navbar-nav>li>.dropdown:hover{
     color:#fff;
 }
+.copyright{
+margin: 15px auto;
+display: block;
+width: 320px;
+text-align: center;
+}
+.copyright a{cursor:pointer;}
