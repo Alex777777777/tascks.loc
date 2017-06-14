@@ -63,3 +63,23 @@ width: 370px;
 .frm_str{
     margin: 10px auto;
 }
+.sidebar{
+    margin:10px
+}
+.gpb_body>ul>li.span{
+display:block;
+min-width: 16px;
+min-height: 16px;
+display: block;
+float: right;
+border-radius: 10px;
+}
+.stat0{
+    background: green;
+}
+.stat10{
+    background: orange;
+}
+.stat100{
+background: red;
+}

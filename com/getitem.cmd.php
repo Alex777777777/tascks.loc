@@ -1,6 +1,7 @@
 <?php
 require_once($PathLoc."/cls/mttascks.class.php");
 $lid=$_POST["lp"];
+$flt=$_POST["flt"];
 $ppanel=array();
 $tsk=new mtTascks();
 $tsk->GetItem($lid);
@@ -8,7 +9,7 @@ $ppanel[0]="tascks:/";
 if($lid!="0")$ppanel[0]=$tsk->GetPath();
 $ttpl= new mtTascksTPL();
 $tsk=new mtTascks();
-$tsk->SelectFrom($lid);
+$tsk->SelectFrom($lid,$flt);
 $arr=$tsk->arr;
 $ttpl->Select();
 $tpla=$ttpl->arr;
@@ -37,7 +38,7 @@ $ppanel=array();
 $ppanel[0]="tascks:/";
 if($lid!="0")$ppanel[0]=$tsk->GetPath();
 $tsk=new mtTascks();
-$tsk->SelectFrom($lid);
+$tsk->SelectFrom($lid,$flt);
 $arr=$tsk->arr;
 for($i=0;$i<count($arr);$i++){
     $tsk->GetItem($arr[$i]["id"]);

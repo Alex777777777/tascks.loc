@@ -59,4 +59,5 @@ $(document).ready(function(){
     if(tasck_count==0){
         setTimeout("window.location.reload();",60000);
     }
+    $("#bt_load").click();
 })

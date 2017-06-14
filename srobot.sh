@@ -1,0 +1,1 @@
+nohup /usr/bin/php -f robot.php > log/out.txt &

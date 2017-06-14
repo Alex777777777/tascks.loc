@@ -38,5 +38,17 @@ function Delete($lid){
     $lsql="DELETE FROM ?n WHERE id=$lid";
     return($mdb->query($lsql,$this->tbl));    
 }
+function AddTask($tasck,$user){
+    global $mdb;
+    $dt=time();
+    $lsql="INSERT INTO  ?n(user,tasck_id,time) VALUES(?i,?i,?i)";
+    return($mdb->query($lsql,$this->tbl,$user,$tasck,$dt));    
+}
+function GetCountTascks($lusr){
+    global $mdb;
+    $lsql="SELECT count(id) as num FROM ?n WHERE user=?i";
+    $ret=$mdb->getRow($lsql,$this->tbl,$lusr);
+    return($ret);    
+}
 }
 ?>

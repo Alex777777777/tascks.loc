@@ -31,14 +31,26 @@ private function _clean(){
     $this->state=0;
 }
 
-function SelectFrom($lpar=0){
+function SelectFrom($lpar=0,$stat="*"){
     global $mdb;
-    $this->arr=$mdb->getAll("SELECT id,isgroup FROM ?n WHERE parent=?i AND state <> 100 ORDER BY isgroup DESC, name ASC",$this->tbl,$lpar);
+    $exsql="";
+    $extgsql="AND state<>100";
+    if($stat!="*"){
+        $exsql="AND state=$stat";
+    }else{
+        $exsql="AND state<>100";
+    }
+    if($stat=="100")$extgsql="";
+    $this->arr=array();
+    $lsql="(SELECT id,isgroup FROM ?n WHERE parent=?i AND isgroup='Y' $extgsql ORDER BY name ASC) UNION ALL";
+    $lsql.="(SELECT id,isgroup FROM ?n WHERE parent=?i AND isgroup='N' $exsql ORDER BY isgroup DESC, name ASC)";
+    $this->arr=$mdb->getAll($lsql,$this->tbl,$lpar,$this->tbl,$lpar);
     return(count($this->arr));
 }
 function GetItem($lid){
     global $mdb;
-    $ret=$mdb->getRow("SELECT * FROM ?n WHERE id=?i",$this->tbl,$lid);
+    $lsql="SELECT * FROM ?n WHERE id=?i";
+    $ret=$mdb->getRow($lsql,$this->tbl,$lid);
     $this->_clean();
     if($ret){
         $this->id=$ret["id"];
@@ -113,6 +125,12 @@ function Delete(){
     $lsql="UPDATE ?n SET state=100 WHERE id=?i";
     $mdb->query($lsql,$this->tbl,$this->id);
     return(0);
+}
+function StartDo(){
+    global $mdb;
+    $lsql="UPDATE ?n SET state=1 WHERE id=?i";
+    $mdb->query($lsql,$this->tbl,$this->id);
+    
 }
 }
 class mtTascksParam{

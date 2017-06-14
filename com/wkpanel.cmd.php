@@ -1,6 +1,7 @@
 <?php
 require_once("$PathLoc/cls/mttascks.class.php");
 require_once("$PathLoc/cls/mtwkpanel.class.php");
+require_once("$PathLoc/cls/mtwkstate.class.php");
 if(!isset($_POST["tpl"])){echo "err";exit;}
 $tpl=$_POST["tpl"];
 $tsk=new mtTascks();
@@ -11,7 +12,6 @@ switch($tpl){
         $lid=$_POST["id"];
         $wkp=new mtWKPanel();
         $ret=$wkp->GetItem($lid);
-        $wkp->Delete($lid);
         $tsk=new mtTascks();
         $tsk->GetItem($ret["tasck_id"]);
         $tskms=new mtTascksMS();
@@ -20,6 +20,11 @@ switch($tpl){
         $tskms->descr=$ldescr;
         $tskms->reason=$lresume;
         $tskms->Save();
+        $wks=new mtWKState();
+        $lst=$lresume;
+        if($lst>=10)$lst=20;
+        $wks->UpdateStatus2($tsk->id,$lst);
+        $wkp->Delete($lid);
     break;
 }
 ?>

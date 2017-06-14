@@ -70,10 +70,11 @@ box-shadow: 0 0 5px #000;
 position:absolute;
 display:none;
 background: rgb(59, 78, 111);
-height:40px;
+height:36px;
 padding: 5px;    
 }
 #submenu>div{display: flex;margin: 0 0 0 auto;}
+#submenu>div.sm_l{float: left;margin: 0;}
 .btn-mini{
     display:block;
 }
@@ -88,6 +89,14 @@ color:#000fff;
 #edcell{display:none;}
 
 .ngfrm{
+display:none;
+position: absolute;
+z-index: 99;
+background: #fff;
+top: 150px;
+left: 400px;
+}
+.dofrm{
 display:none;
 position: absolute;
 z-index: 99;

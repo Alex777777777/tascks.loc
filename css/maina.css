@@ -1,0 +1,25 @@
+
+.row{display:flex;}
+.sidebar{
+    margin:10px
+}
+.gpb_body>ul{padding: 0;display: block;}
+.gpb_body>ul>li{display: block; margin:5px;border-bottom: 1px solid;cursor:pointer;}
+.gpb_body>ul>li:hover{font-weight: 600;}
+.gpb_body>ul>li>span{
+display:block;
+min-width: 16px;
+min-height: 16px;
+display: block;
+float: right;
+border-radius: 10px;
+}
+.stat0{
+    background: green;
+}
+.stat10{
+    background: orange;
+}
+.stat100{
+background: red;
+}

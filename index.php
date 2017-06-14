@@ -21,9 +21,11 @@ $user->Open($tuser,$tpass);
 $user->Validate($tpass);
 if(!$user->valid){require("tpl/auth.php");}
 else {
+    if($user->role==9){
     $usr_state=new mtUSState();
     $usr_state->Open($user);
     $usr_state->UpdateState();
+    }
     require("tpl/loader.php");   
 }
 ?>

@@ -5,7 +5,9 @@ private $user;
 var $time_s;
 var $time_t;
 var $status;
+
 private $tbl;
+var $param_timeout;
 private function _clean(){
     $this->id=0;
     $this->user=0;
@@ -16,11 +18,13 @@ private function _clean(){
 function __construct(){
     $this->_clean();
     $this->tbl="mtUSState";
+    $this->param_timeout=30*60;
 }
 function __destruct() {
 }
 function Open($lusr){
     global $mdb;
+    if($lusr->role!=9)return;
     $lsql="SELECT * FROM ?n WHERE user=?i AND status=0";
     $rows=$mdb->getAll($lsql,$this->tbl,$lusr->id);
     if(!count($rows))$this->NewState();
@@ -32,7 +36,7 @@ function Open($lusr){
         $this->time_t=$row["time_t"];
         $this->status=$row["status"];
     }
-    if($this->time_t-time()>1800)$this->NewState();    
+    if(time()-$this->time_t>1800)$this->NewState();    
 }
 private function NewState(){
     global $user;
@@ -62,7 +66,6 @@ function UpdateState(){
 }
 function ViewState($lusr){
     global $mdb;
-    if(!$this->id)return(-1);
     $lsql="SELECT id,time_s,time_t FROM ?n WHERE user=?i AND status=0";
     $rows=$mdb->getAll($lsql,$this->tbl,$lusr);
     $ret=-1;
@@ -71,6 +74,39 @@ function ViewState($lusr){
         
     };
     return($ret);
+}
+function ViewState2($lusr){
+    global $mdb;
+    $lsql="SELECT id,time_s,time_t,status FROM ?n WHERE user=?i ORDER BY time_t DESC";
+    $rows=$mdb->getAll($lsql,$this->tbl,$lusr);
+    $ret=-1;
+    if(count($rows)){
+        $ret=$rows[0];
+        
+    };
+    return($ret);
+}
+function CloseUserByTimeOut(){
+    global $mdb;
+    $dt=time();
+    $lsql="UPDATE ?n SET status=100 WHERE (status=0)AND($dt-time_t>?i)";
+    $mdb->query($lsql,$this->tbl,$this->param_timeout); 
+}
+
+function GetUserByGroup($lgrp=0){
+    global $mdb;
+    $lsql="SELECT mtUSState.id, mtUSState.user "; 
+    $lsql.="FROM mtUSState LEFT OUTER JOIN  mtUsers ON mtUsers.id=mtUSState.user ";
+    $lsql.="WHERE mtUSState.status=0 AND mtUsers.parent=$lgrp";
+    if($lgrp==0)$lsql="SELECT mtUSState.id, mtUSState.user FROM mtUSState WHERE mtUSState.status=0";
+    $arr=$mdb->getAll($lsql);
+    $wkp=new mtWKPanel();
+    for($i=0;$i<count($arr);$i++){
+        $lid=$arr[$i]["user"];
+        $ret=$wkp->GetCountTascks($lid);
+        $arr[$i]["count"]=$ret["num"];
+    }
+    return($arr);
 }
 }
 ?>

@@ -1,6 +1,7 @@
 <?php
-if($user->role==10){
-    require("$PathLoc/tpl/main.tpl.php");   
+if($user->role==1){
+    require("$PathLoc/tpl/maina.tpl.php");
+       
 }else{
     require_once("$PathLoc/cls/mtwkpanel.class.php");
     $mpnl=new mtWKPanel();
@@ -65,9 +66,7 @@ foreach($arr as $val){
     }
 ?>
 </div>
-<?php    
-}  
-?>
+
 <div class="panel panel-default addform">
   <div class="panel-heading">
     <h3 class="panel-title" id="caps_txt">Новое сообщение</h3>
@@ -88,3 +87,6 @@ foreach($arr as $val){
 <div class="frm_str"><button class="button btn" id="frm_net">Отмена</button> <button class="button btn" id="frm_save">Записать</button></div>
   </div>
 </div>
+<?php    
+}  
+?>

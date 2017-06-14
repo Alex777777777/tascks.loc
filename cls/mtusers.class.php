@@ -48,12 +48,18 @@ function GetRole(){
 }
 function Select(){
     global $mdb;
-    $this->arr=$mdb->getAll("SELECT id FROM ?n WHERE isgroup='N'",$this->tbl);
+    $this->arr=$mdb->getAll("SELECT id,name FROM ?n WHERE isgroup='N'",$this->tbl);
     return(count($this->arr));
 }
 function SelectUserGp($lid){
     global $mdb;
-    $lstr="SELECT id,name,parent FROM ?n WHERE isgroup='N' AND (parent=$lid OR parent=0)";
+    $lstr="SELECT id,name,parent FROM ?n WHERE isgroup='N' AND (parent=$lid OR parent=0) AND role=9";
+    $this->arr=$mdb->getAll($lstr,$this->tbl);
+    return(count($this->arr));
+}
+function SelectUserGp2($lid){
+    global $mdb;
+    $lstr="SELECT id,name,parent FROM ?n WHERE isgroup='N' AND parent=$lid AND role=9";
     $this->arr=$mdb->getAll($lstr,$this->tbl);
     return(count($this->arr));
 }

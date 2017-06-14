@@ -12,7 +12,7 @@
   $do="main";
   if(isset($_GET["do"]))if($_GET["do"])$_SESSION['do']=$_GET["do"];
   if(isset($_SESSION['do']))if($_SESSION['do']) $do=$_SESSION['do'];
-  
+  if(($do=="main") &&($user->role==1))$do="maina";
   
   require("header.tpl.php");
   require($do.".tpl.php");

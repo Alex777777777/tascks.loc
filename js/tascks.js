@@ -13,7 +13,8 @@ function CreateSubMenu(){
 function GetItems(){
     param={
         "lp":lp_curdir,
-        "rp":rp_curdir
+        "rp":rp_curdir,
+        "flt":viewes
     }   
     $.ajax({
         type: "POST",
@@ -57,6 +58,8 @@ function UpdateP(obj,lst){
     ltd=obj.find("tr");
     ltd.removeClass("st_file").removeClass("st_grp");
     ltd.removeAttr("data-id");
+    ltd.removeAttr("data-state");
+    ltd.removeAttr("data-grp");
     lst_len=lst.length;
     row_cnt=15;
     if(lst_len<15)row_cnt=lst_len;
@@ -67,11 +70,33 @@ function UpdateP(obj,lst){
         if(ldt.isgroup=="Y")lrow.parent().addClass("st_grp");
         else lrow.parent().addClass("st_file");
         lrow.parent().attr("data-id",ldt.id);
+        lrow.parent().attr("data-state",ldt.state);
+        lrow.parent().attr("data-grp",ldt.isgroup);
         lrow.eq(0).html(TbIcon(ldt.isgroup));
         lrow.eq(1).html(ldt.name);
         lrow.eq(1).attr("title",ldt.descr);
         lrow.eq(2).html(ldt.time);
-        lrow.eq(3).html(ldt.tpln);
+        tmp="";
+        if(ldt.isgroup=="N"){
+        switch(ldt.state){
+            case "0":
+                tmp="Новое";
+            break;
+            case "1":
+                tmp="Обработка";
+            break;
+            case "11":
+                tmp="Закрыт";
+            break;
+            case "12":
+                tmp="Архив";
+            break;
+            case "100":
+                tmp="Удален";
+            break;
+        }
+        }
+        lrow.eq(3).html(tmp);
     }
 }
 function UpdatePanel(){
@@ -90,6 +115,23 @@ function SetSubPanel(){
         "left":ll,
         "width":lw
     });
+}
+function UpdateTabs(){
+    $(".tab").removeClass("active");
+    $(".tab[data-id='"+viewes+"']").addClass("active");
+    if((viewes=="*")||(viewes=="0"))$(".pnl[data-id='do']").css("display","block");
+    else $(".pnl[data-id='do']").css("display","none");
+    param={
+        "tpl":"viewes",
+        "viewes":viewes
+    }
+    $.ajax({
+    type: "POST",
+    url: "?cmd=tasckcmd",
+    data: param,
+    cache: false,
+    async: true
+    })
 }
 $(window).resize(function(){
     SetSubPanel();
@@ -116,7 +158,7 @@ $(document).ready(function(){
             $("tr").removeClass("active2");
             $("#submenu").css("display","none");
             GetItems();
-            UpdatePanel();
+            //UpdatePanel();
         }else{            
             window.location = "?do=newtasck&item="+lid+"&lp="+lp_curdir+"&rp="+rp_curdir;
         }
@@ -135,6 +177,22 @@ $(document).ready(function(){
         di=$(this).attr("data-id");
         ext="&lp="+lp_curdir+"&rp="+rp_curdir;
         switch(di){
+            case "do":
+                var obj=$("tr.active2");
+                lid=obj.attr("data-id");
+                st=obj.attr("data-state");
+                grp=obj.attr("data-grp");
+                param={
+                    "id":lid,
+                    "state":st,
+                    "grp":grp
+                }
+                tmp=JSON.stringify(param);
+                if(st!="0"){alert("Не могу отправить!"); return;}
+                $(".dofrm").attr("data-param",tmp);
+                $(".dofrm").css("display","block");
+                $("#ext-wrp").css("display","block");
+            break;
             case "nz":
                 cgp=0;
                 if(CurPanel=="rpanel")cgp=rp_curdir;
@@ -149,7 +207,36 @@ $(document).ready(function(){
             break;
             case "fcl":
                 $(".ngfrm").css("display","none");
+                $(".dofrm").css("display","none");
+                $(".dofrm").attr("data-param","");
                 $("#ext-wrp").css("display","none");
+            break;
+            case "dwr":
+                param={
+                    "tpl":"do",
+                    "param":$(".dofrm").attr("data-param"),
+                    "togrp":$("#togrp").val(),
+                    "tousr":$("#tousr").val(),
+                }
+                $.ajax({
+                type: "POST",
+                url: "?cmd=tasckcmd",
+                data: param,
+                cache: false,
+                async: true,
+                success: function(qstr){
+                    ret=qstr;
+                    if(ret=="OK"){
+                        GetItems();
+                        $(".dofrm").css("display","none");
+                        $(".dofrm").attr("data-param","");
+                        $("#ext-wrp").css("display","none");
+                    }
+                    if(ret=="ER"){
+                        alert("Ошибка отправки задания!");
+                    }            
+                }
+                })
             break;
             case "fwr":
                 if(CurPanel="rpanel"){
@@ -272,6 +359,12 @@ $(document).ready(function(){
             break;
         }
     })
+    $(".tab").click(function(){
+        viewes=$(this).attr("data-id");
+        UpdateTabs();
+        GetItems();
+    })
     GetItems();
     UpdatePanel();
+    UpdateTabs();
 })

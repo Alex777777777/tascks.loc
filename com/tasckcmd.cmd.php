@@ -67,5 +67,49 @@ switch($tpl){
         } else echo "ER";
         exit;
     break;
+    case "viewes":
+        $_SESSION["viewes"]=@$_POST["viewes"];
+        exit;
+    break;
+    case "do":
+        require_once("cls/mtwkstate.class.php");
+        $param= json_decode($_POST["param"],true);
+        /*"id":lid,
+        "state":st,
+        "grp":grp*/
+        $togrp=$_POST["togrp"];
+        $tousr=$_POST["tousr"];
+        $tsk=new mtTascks();
+        $tsk->GetItem($param["id"]);
+        if($tsk->id==0){echo "ER";exit;}
+        $wst=new mtWKState();
+        if($tsk->isgroup=="N"){
+            if($tsk->state!=0){echo "ER";exit;}
+            else{
+                $tsk->StartDo();
+                $wst->tasck_id=$tsk->id;
+                $wst->ugrp=$togrp;
+                $wst->user=$tousr;
+                $wst->CreateJob();
+            }
+        }else{
+            $tsk->SelectFrom($tsk->id,0);
+            $arr=$tsk->arr;
+            foreach($arr as $val){
+                $wst->id=0;
+                if($val["isgroup"]=="N"){
+                $tsk->GetItem($val["id"]);
+                if($tsk->state==0){
+                    $tsk->StartDo();
+                    $wst->tasck_id=$tsk->id;
+                    $wst->ugrp=$togrp;
+                    $wst->user=$tousr;
+                    $wst->CreateJob();
+                }}
+            }
+        }
+        echo "OK";
+        exit;
+    break;
 }
 ?>
