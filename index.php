@@ -1,5 +1,6 @@
 <?php
 session_start();
+//unset($_SESSION['user']);
 $PathLoc=__DIR__;
 require("cls/safemysql.class.php");
 $mdb = new SafeMySQL(require("cls/db_param.php"));

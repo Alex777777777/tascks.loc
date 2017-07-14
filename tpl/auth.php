@@ -36,7 +36,7 @@ if(isset($_POST["login"])){
 <body>  
     <div class="container">
       <form class="form-signin" action="index.php?do=auth" method="POST">
-        <h2 class="form-signin-heading">Пожалуйста зарегистрируйтесь</h2>
+        <h2 class="form-signin-heading">Вход в систему</h2>
         <input type="text" name="login" class="form-control" placeholder="Логин" required autofocus>
         <input type="password" name="pass" class="form-control" placeholder="Пароль" required>
         <label class="checkbox">

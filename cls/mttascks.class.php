@@ -47,6 +47,28 @@ function SelectFrom($lpar=0,$stat="*"){
     $this->arr=$mdb->getAll($lsql,$this->tbl,$lpar,$this->tbl,$lpar);
     return(count($this->arr));
 }
+function SelectGrp($stat="*"){
+    global $mdb;
+    $exsql="";
+    if($stat!="*"){
+        $exsql="AND state=$stat";
+    };
+    $this->arr=array();
+    $lsql="SELECT id,name,descr,state FROM ?n WHERE isgroup='Y' $exsql ORDER BY name ASC";
+    $this->arr=$mdb->getAll($lsql,$this->tbl);
+    return(count($this->arr));
+}
+function SelectTskByGrp($lgrp,$stat="*"){
+    global $mdb;
+    $exsql="";
+    if($stat!="*"){
+        $exsql="AND state=$stat";
+    };
+    $this->arr=array();
+    $lsql="SELECT id,name,descr,time,state FROM ?n WHERE parent= $lgrp AND isgroup='N' $exsql ORDER BY name ASC";
+    $this->arr=$mdb->getAll($lsql,$this->tbl);
+    return(count($this->arr));
+}
 function GetItem($lid){
     global $mdb;
     $lsql="SELECT * FROM ?n WHERE id=?i";
@@ -121,14 +143,35 @@ function Delete(){
         $lsql="SELECT id FROM ?n WHERE parent=?i";
         $arr=$mdb->getAll($lsql,$this->tbl,$this->id);
         if(count($arr))return(1);
+    } else{
+        $lsql="DELETE FROM mtTasckMS WHERE tasck_id=?i";
+        $mdb->query($lsql,$this->id);
+        $lsql="DELETE FROM mtTasckParam WHERE tasck_id=?i";
+        $mdb->query($lsql,$this->id);
+        $lsql="DELETE FROM mtWKPanel WHERE tasck_id=?i";
+        $mdb->query($lsql,$this->id);
+        $lsql="DELETE FROM mtWKState WHERE tasck_id=?i";
+        $mdb->query($lsql,$this->id);
     }
-    $lsql="UPDATE ?n SET state=100 WHERE id=?i";
-    $mdb->query($lsql,$this->tbl,$this->id);
+    $lsql="DELETE FROM mtTascks WHERE id=?i";
+    $mdb->query($lsql,$this->id);
     return(0);
 }
 function StartDo(){
     global $mdb;
-    $lsql="UPDATE ?n SET state=1 WHERE id=?i";
+    $lsql="UPDATE ?n SET state=10 WHERE id=?i";
+    $mdb->query($lsql,$this->tbl,$this->id);
+    
+}
+function StopDo(){
+    global $mdb;
+    $lsql="UPDATE ?n SET state=11 WHERE id=?i";
+    $mdb->query($lsql,$this->tbl,$this->id);
+    
+}
+function SetState($st){
+    global $mdb;
+    $lsql="UPDATE ?n SET state=$st WHERE id=?i";
     $mdb->query($lsql,$this->tbl,$this->id);
     
 }
@@ -241,6 +284,19 @@ class mtTascksTPL{
         foreach($this->params as $val){
             $ret[$val[0]]=$val[1];
         }
+        return($ret);
+    }
+    function AddNew($lname,$ldescr){
+        global $mdb;
+        $lstr="INSERT INTO ?n(name,descr) VALUES(?s,?s)";
+        $ret=$mdb->query($lstr,$this->tbl,$lname,$ldescr);
+        if($ret)$this->GetItem($mdb->insertId());
+        
+    }
+    function AddNewParam($lid,$lkey,$lname){
+        global $mdb;
+        $lstr="INSERT INTO ?n(idTPL,param,name) VALUES(?i,?s,?s)";
+        $ret=$mdb->query($lstr,$this->tblp,$lid,$lkey,$lname);
         return($ret);
     }
     function GetItem($lid){

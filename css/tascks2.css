@@ -1,0 +1,205 @@
+.glyphicon > ul{
+font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.row{
+display:flex;
+margin: 0;
+}
+.col{
+margin: 0 10px;
+padding: 0 7px;  
+}
+.itembar {
+background: #eee;
+width:300px;
+padding: 0 5px;
+}
+.projbar {
+min-height: 400px;
+background: #eee;
+width:250px;
+}
+.pb_header{
+background: #666;
+color: #ddd;
+padding-left: 10px;
+font-size: 10px;
+cursor: pointer;
+min-height: 25px;
+line-height: 25px;
+}
+.pb_header:hover{color: #fff;}
+.pb_header>ul{
+display: none;
+position: absolute;
+color: #000;
+top: 23px;
+left: 15px;
+}
+.pb_header>ul>li{padding: 0 15px;}
+.pb_caps{
+text-align: center;
+font-size: 16px;
+font-weight: 600;    
+}
+.pb_caps>span{display: block;}
+.pb_caps>.extdo{
+position: relative;
+display:block;
+float:right;
+width: 24px;
+height: 24px;
+background: #54a3e7;
+line-height: 24px;
+border-radius: 12px;
+padding-left: 2px;
+z-index: 90;
+cursor:pointer;
+}
+.proj_menu{
+position: relative;
+left: 15px;
+top: -20px;
+}
+.proj_menu>li{
+padding: 0 0 0 15px;
+cursor:pointer;
+}
+.dropdown-menu>li:hover{
+background: #eee;
+}
+.pb_caps>.icon{float:left;}
+.dobar{
+display:flex;
+font-size: 10px;
+background: #000;
+width:100%;
+height: 25px;
+line-height: 25px;
+}
+.dobar>a{
+display:block;
+margin: auto;
+text-decoration: none;
+color:#aaa;
+}
+.dobar>a:hover{
+color:#fff;    
+}
+.dobar>span{
+color: #fff;
+display: block;
+margin-left: 10px;
+font-size: 12pt;    
+}
+.nav>ul{
+display:block;
+}
+.nav>li{
+display:flex;
+cursor:pointer;
+}
+.n0{
+background: #eee;
+}
+.n1{
+background: #ddd;
+}
+.nav>li:hover{
+background: #8fbeec;
+}
+.projbar>ul>li>.cont_col1>input{
+margin: 10px;
+}
+.projbar>ul>li>.cont_col2{
+overflow: hidden;
+}
+.projbar>ul>li>.cont_col2>.cont_r1{
+text-align: center;
+font-weight: 600;
+}
+.projbar>ul>li>.cont_col2>.cont_r2{
+width: 1000px;
+display: block;
+font-size: 10px;
+}
+.nav > li.active2{
+    background: #8fbeec;
+}
+.tasckbar{
+min-width: 520px;
+background: #eee;
+}
+
+li.task-item{
+display: flex;
+}
+.ti-b1{
+display: block;
+width: 35px;
+height: 40px;
+}
+.ti-b2{
+display: block;
+overflow: hidden;
+height:40px;
+min-width: 450px;
+}
+.ti-b2>.ti-name{
+text-align: center;
+font-size: 18px;
+font-weight: 600;
+}
+.ti-b2>.ti-descr{
+font-size: 10px;
+}
+.ti-b3{
+display: block;
+width: 50px;
+height: 40px;
+padding: 10px;
+float: right;
+}
+.ti-b3>span{
+font-size: 20px;
+}
+.it_str{min-width:280px;}
+.it_str > .its_caps{margin: 0 5px;float:left;}
+.it_str > .its_val{margin: 0 5px;font-weight: 600;}
+.it_str > textarea.its_val{width:280px;}
+table.table{font-size: 10px;}
+.separ{border-bottom: 1px solid #000;margin-top: 10px;}
+.ngfrm{
+display:none;
+position: absolute;
+z-index: 99;
+background: #fff;
+top: 150px;
+left: 400px;
+}
+.dofrm{
+display:none;
+position: absolute;
+z-index: 99;
+background: #fff;
+top: 150px;
+left: 400px;
+}
+.frm_str{
+margin: 5px auto;
+}
+.frm_str>span{
+    display:block;
+}
+.frm_str>input{
+display: block;
+width: 320px;
+}
+.frm_str>textarea{
+display: block;
+width: 320px;
+}
+.frm{
+margin-left: 10px;
+width: 150px;
+}

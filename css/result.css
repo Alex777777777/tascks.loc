@@ -1,0 +1,10 @@
+.formdts{display:flex;line-height: 36px;margin-bottom: 15px;}
+.dtfield{width: 150px;margin: 0 15px;}
+#btn_select{height: 34px;}
+.table > tbody > tr > .col1{border-top:none;width:100px;}
+.table > tbody > tr > .col2{width:250px;cursor:pointer;}
+.table > tbody > tr > .col3{width:170px;}
+.table > tbody > tr > .col4{min-width:170px;}
+.table > tbody > tr > .col5{width:100px;}
+.table > tbody > tr.tb_it>td{border-bottom:1px solid #ddd;}
+.tb_it{font-weight: 600;}

@@ -11,7 +11,7 @@ if($user->role==1){
     else $kvo=0;
     $v=$usr_state->ViewState($user->id);
     if($v==(-1))$vsec="N/A";
-    else $vsec=time() - $v["time_s"];
+    else $vsec=time() - $v["time_t"];
     
     
 ?>

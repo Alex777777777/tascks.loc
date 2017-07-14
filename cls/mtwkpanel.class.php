@@ -50,5 +50,11 @@ function GetCountTascks($lusr){
     $ret=$mdb->getRow($lsql,$this->tbl,$lusr);
     return($ret);    
 }
+function GetTascksById($lid){
+   global $mdb;
+   $lsql="SELECT id,tasck_id, time FROM ?n WHERE user=$lid";
+   $ret = $mdb->getAll($lsql,$this->tbl);
+   return($ret);  
+}
 }
 ?>

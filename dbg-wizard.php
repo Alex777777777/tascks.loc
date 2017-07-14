@@ -35,8 +35,8 @@ http://www.nusphere.com
 	error_reporting(E_ALL & ~(E_NOTICE | E_STRICT));
 	//    ini_set('display_errors', 'off');
 	
-	define('DBG_WIZARD_VERSION', '3.8.3801');
-	define('DBG_VERSION', '8.2.7');
+	define('DBG_WIZARD_VERSION', '3.8.3802');
+	define('DBG_VERSION', '8.2.9');
 	
 	$expected_dbg = DBG_VERSION;
 	$expected_phpunit = '';

@@ -2,8 +2,12 @@ $(document).ready(function(){
     $(".button").click(function(){
         di=$(this).attr("data-id");
         if(di=="close"){
-            document.location="?do=tascks";//+"&lp="+lp+"&rp="+rp
-            return
+            lgrp=$("#tsk_grp").attr("data-id");
+            bkg=$(this).attr("data-bkg");
+            if(bkg){
+                if(bkg=="res")document.location="?do=result";
+            }else  document.location="?do=tascks2&grp="+lgrp;
+            return;
         }
         if(di=="save"){
             lid=$("form").attr("data-id");
@@ -43,7 +47,11 @@ $(document).ready(function(){
                 success: function(qstr){
                     ret=qstr;
                     if(ret=="tasck"){
-                        document.location="?do=tascks";
+                        lgrp=$("#tsk_grp").attr("data-id");
+                        bkg=$(this).attr("data-bkg");
+                        if(bkg){
+                            if(bkg=="res")document.location="?do=result";
+                        }else document.location="?do=tascks2&grp="+lgrp;
                     }else{
                     if(ret!="0"){
                         document.location="?do=newtasck&item="+ret;

@@ -1,3 +1,10 @@
+.row{
+display:flex;
+}
+#rpanel{
+margin-left: 10px;
+width: 600px;
+}
 .sd_hd{
     font-size:24pt;
     text-align: center;
@@ -47,5 +54,4 @@ cursor:pointer;
 .button:hover{
 box-shadow: 2px 2px 10px #000;
 color:#fff;
-
 }

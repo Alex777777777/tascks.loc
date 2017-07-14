@@ -14,7 +14,7 @@ $(document).ready(function(){
             }
             $.ajax({
                 type: "POST",
-                url: "command.php",
+                url: "?cmd=usercmd",
                 data: param,
                 cache: false,
                 async: true,
@@ -26,14 +26,15 @@ $(document).ready(function(){
             });
             break;
             case "dell":
-            if(confirm("Вы желаете удалить?"))return;
+            
+            if(!confirm("Вы желаете удалить?"))return;
             param={
                 "tpl":"deluser",
                 "id":lid
             }
             $.ajax({
                 type: "POST",
-                url: "command.php",
+                url: "?cmd=usercmd",
                 data: param,
                 cache: false,
                 async: true,

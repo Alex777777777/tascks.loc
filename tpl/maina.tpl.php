@@ -15,7 +15,7 @@ if($user->role!=1){
 </div>
 <div class="container-fluid">
 <div class="row">
-<div class="sidebar">
+<div class="col-md-4">
 <?php
     $usst=new mtUSState();
     $lusr=new mtUsers();
@@ -33,10 +33,11 @@ if($user->role!=1){
         foreach($lusr->arr as $val){
             $lusr->GetItem($val["id"]);
             $lname=$lusr->name;
+            $lkey=$lusr->id;
             $state=$usst->ViewState2($lusr->id);
             if($state==-1)$st="100";
             else $st=$state["status"];
-            echo "<li><span class='stat$st'></span>$lname</li>";
+            echo "<li data-id='$lkey'><span class='stat$st'></span>$lname</li>";
         }
                 
     ?>
@@ -50,6 +51,15 @@ if($user->role!=1){
     }
 ?>
 </div>
+<div class="col-md-8">
+<div class="panel panel-default usb">
+  <div class="panel-heading">
+    <h3 class="panel-title usb_caps">Инфо. юзера</h3>
+  </div>
+  <div class="panel-body usb_body" data-id="0">
+  </div>
+ </div> 
+ </div>
 </div>
 </div>
 <?php

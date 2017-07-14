@@ -15,6 +15,14 @@ switch($tpl){
         $obj->lang=$_POST["lang"];
         if($_POST["ispass"])$obj->pass=$_POST["pass"];
         $obj->Save();
+    break;  
+    case "deluser":
+        $obj->Delete($_POST["id"]);
+        echo 0;
+    break;
+    case "frozuser":
+        $obj->Frozen($_POST["id"]);
+        echo 0;
     break;
 }
 

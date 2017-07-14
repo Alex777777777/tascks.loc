@@ -2,10 +2,11 @@
 require_once("cls/mttascks.class.php");
 if(isset($_GET["lp"]))$_SESSION["lp"] = $_GET["lp"];
 if(isset($_GET["rp"]))$_SESSION["rp"] = $_GET["rp"];
+$bkg="";
+if(isset($_GET["bkg"]))$bkg=$_GET["bkg"];
     $mts=new mtTascks();
     $gp=new mtTascks();
     $mtpl= new mtTascksTPL();
-    $mtpl->Select();
     $caps="Добавление нового задания";
     if(($user->role!=1)){
         $caps="Недостаточно прав";
@@ -14,24 +15,26 @@ if(isset($_GET["rp"]))$_SESSION["rp"] = $_GET["rp"];
     }
     if(isset($_GET['item'])){
         $mts->GetItem($_GET['item']);
+        $gp->GetItem($mts->parent);
         if($mts->isgroup=="Y"){
             $caps="Внутренняя Ошибка.";
             echo '<div class="sd_hd"><?php echo $caps;?></div>';
             exit;
         }
         if($mts->tpl)$mtpl->GetItem($mts->tpl);
-        $caps="Просмотр задания ".$mts->name;
+        $caps="Просмотр задания #".$mts->id."; ".$mts->name;
     }
     $grp_txt="Без группы";
-    if(isset($_GET['gp'])){
-        if($_GET['gp']!="0"){
-        $gp->GetItem($_GET['gp']);
+    if(isset($_GET['grp'])){
+        if($_GET['grp']!="0"){
+        $gp->GetItem($_GET['grp']);
         $grp_txt=$gp->name;
         };
     }
     
 ?>
 <div class="sd_hd"><?= $caps;?></div>
+<div class="row">
 <div class="panel panel-default" id='mpanel'>
 <form autocomplete="off" data-id="<?= $mts->id;?>">
 <div class="frm_str"><label for="tsk_tpl">Шаблон задания</label>
@@ -40,11 +43,10 @@ if($mts->id==0){
 ?>
 <select id="tsk_tpl" size=1>
 <?php
-$ext="selected"; 
-  for($i=0;$i<count($mtpl->arr);$i++){
-      
-      $val=$mtpl->arr[$i];
-      echo "<option $ext value='$i'>$val</option>";
+$ext="selected";
+$arr=$mtpl->Select(); 
+  foreach($arr as $key =>$val){
+      echo "<option $ext value='$key'>$val</option>";
       $ext="";
   }
 ?>
@@ -75,7 +77,33 @@ $ext="selected";
 
     }
 ?>
-<div class="frm_str"><div class='button' data-id='close'>Закрыть</div><div class='button'  data-id='save'>Сохранить</div></div>
+<div class="frm_str"><div class='button' data-id='close' data-bkg='<?= $bkg ?>'>Закрыть</div><div class='button'  data-id='save'  data-bkg='<?= $bkg ?>'>Сохранить</div></div>
 </form>
+</div>
+<?php
+    if($mts->id!=0){
+?>
+<div class="panel panel-default" id='rpanel'>
+<table class="table">
+  <thead><tr><th class="col1">№</th><th class="col2">Дата</th><th class="col3">Юзер</th><th class="col4">Описание</th><th class="col5">Reason</th></tr></thead>
+  <tbody>
+  <?php
+      $tms=new mtTascksMS();
+      $tms->Select($mts->id);
+      $lusr=new mtUsers();
+      for($i=1;$i<=count($tms->arr);$i++){
+          $tms->GetRow($i);
+          $lusr->GetItem($tms->user);
+  ?>
+  <tr><td><?= $tms->cod ?></td><td><?= $tms->time ?></td><td><?= $lusr->name ?></td><td><?= $tms->descr ?></td><td><?= $tms->GetReason()?></td></tr>
+  <?php
+      }
+  ?>
+  </tbody>
+  </table>
+</div>
+<?php
+    }
+?>
 </div>
 <div class="sd_ft"></div>

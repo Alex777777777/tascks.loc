@@ -58,6 +58,48 @@ private function CloseState(){
     $lsql="UPDATE ?n SET status=10 WHERE id=?i";
     if($mdb->query($lsql,$this->tbl,$this->id))$this->_clean;
 }
+function GetActivity($lusr){
+    global $mdb;
+    if(!$lusr)return;
+    $ret=["sess"=>0,"daily"=>0,"weakly"=>0,"moonly"=>0];
+    $dt=time();
+    $dtarr=getdate(date($dt));
+    $lmoon=$dtarr["mon"];
+    $nmoon=mktime(0,0,0,$lmoon,1);
+    $nweak=mktime(0,0,0,$lmoon,$dtarr["mday"]-$dtarr["wday"]);
+    $nday=mktime(0,0,0,$lmoon,$dtarr["mday"]);
+    
+    $lsql="SELECT * FROM ?n WHERE user=$lusr AND time_t>=$nmoon ORDER BY time_s";
+    $arr = $mdb->getAll($lsql,$this->tbl);
+    foreach($arr as $key){        
+        if($key["status"]==0){
+            $ltm=$dt-$key["time_s"];
+            $ret["sess"]=$ltm;
+            $ret["moonly"]+=$ltm;
+            $ret["weakly"]+=$ltm;
+            $ret["daily"]+=$ltm;
+        }else{
+            if($key["time_t"]>$nmoon){
+                $tmp=$key["time_s"];
+                if($tmp<$nmoon)$tmp=$nmoon;
+                $ret["moonly"]+=$key["time_t"]-$tmp;
+            }
+            if($key["time_t"]>$nweak){
+                $tmp=$key["time_s"];
+                if($tmp<$nweak)$tmp=$nweak;
+                $ret["weakly"]+=$key["time_t"]-$tmp;
+            }
+            if($key["time_t"]>$nday){
+                $tmp=$key["time_s"];
+                if($tmp<$nday)$tmp=$nday;
+                $ret["daily"]+=$key["time_t"]-$tmp;
+            }
+        }
+        
+    }
+    
+    return($ret);
+}
 function UpdateState(){
     global $mdb;
     if(!$this->id)return;
@@ -89,8 +131,11 @@ function ViewState2($lusr){
 function CloseUserByTimeOut(){
     global $mdb;
     $dt=time();
+    $lsql="SELECT id FROM  ?n WHERE (status=0)AND($dt-time_t>?i)";
+    $ret=$mdb->getAll($lsql,$this->tbl,$this->param_timeout);
     $lsql="UPDATE ?n SET status=100 WHERE (status=0)AND($dt-time_t>?i)";
-    $mdb->query($lsql,$this->tbl,$this->param_timeout); 
+    $mdb->query($lsql,$this->tbl,$this->param_timeout);
+    return($ret);
 }
 
 function GetUserByGroup($lgrp=0){

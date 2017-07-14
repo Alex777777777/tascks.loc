@@ -17,7 +17,10 @@
     echo "<link rel='stylesheet' type='text/css' href='css/".$do.".css'>\n";
     echo "<script src='js/".$do.".js' type='text/javascript'></script>\n";
     switch ($do){
-        case "afgani":
+        case "result":
+            echo '<script type="text/javascript" src="js/moment-with-locales.min.js"></script>\n';
+            echo '<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>\n';
+            echo '<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" />\n';
         break;
         //default:
     }
@@ -35,15 +38,13 @@
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
         <li><a href="?do=main">Главная</a></li>
-        <li><a href="?do=resume">Результаты</a></li>
+        <li><a href="?do=result">Результаты</a></li>
         <li><div class="dropdown" >            
                 Админка<span class="caret"></span>
             <ul class="dropdown-menu">
-                <li><a tabindex="-1" href="?do=tascks">Таски</a></li>
-                <li><a tabindex="-1" href="?do=templ">Настройка Движка</a></li>
-                <li><a tabindex="-1" href="#">Что-то еще</a></li>
-                <li class="divider"></li>
-                <li><a tabindex="-1" href="#">Отдельная ссылка</a></li>
+                <li><a tabindex="-1" href="?do=tascks2">Таски</a></li>
+                <li><a tabindex="-1" href="?do=templates">Шаблоны</a></li>
+                
             </ul>
             </div>
         </li>

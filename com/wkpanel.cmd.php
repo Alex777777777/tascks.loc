@@ -25,6 +25,7 @@ switch($tpl){
         if($lst>=10)$lst=20;
         $wks->UpdateStatus2($tsk->id,$lst);
         $wkp->Delete($lid);
+        if($lst==20)$tsk->StopDo();
     break;
 }
 ?>

@@ -1,8 +1,4 @@
-
 .row{display:flex;}
-.sidebar{
-    margin:10px
-}
 .gpb_body>ul{padding: 0;display: block;}
 .gpb_body>ul>li{display: block; margin:5px;border-bottom: 1px solid;cursor:pointer;}
 .gpb_body>ul>li:hover{font-weight: 600;}
@@ -23,3 +19,13 @@ border-radius: 10px;
 .stat100{
 background: red;
 }
+.usb{
+min-height: 300px;    
+}
+.gpb_body > ul > li.active2{font-weight: 600;}
+.col_str{display:flex;margin: 5px 0;}
+.str_caps{width: 45%;}
+.str_val{border: 1px solid;width: 50%;text-align: right;padding: 0 5px;}
+
+td.col6>span{margin: 0 5px;color:#666;}
+td.col6>span:hover{font-weight: 600; color:#000;}
